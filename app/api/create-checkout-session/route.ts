@@ -1,12 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { stripe } from '@/lib/stripe';
+import { prisma } from "../../../lib/prisma";
 import type { PaymentDemandLetterInput } from '@/ai/flows/generate-payment-demand-letter';
 import { saveLetter } from '../../../lib/letter-store';
 
-
 export async function POST(req: NextRequest) {
     try {
-        // 1️⃣ Bezpieczne parsowanie body
         let body: { letterData?: PaymentDemandLetterInput } | null = null;
 
         try {
@@ -20,7 +19,6 @@ export async function POST(req: NextRequest) {
 
         const letterData = body?.letterData;
 
-
         if (!letterData) {
             return NextResponse.json(
                 { error: 'Letter data is required' },
@@ -28,7 +26,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // 2️⃣ Sprawdzenie Stripe
         if (!stripe) {
             console.error('Stripe not initialized. Check STRIPE_SECRET_KEY.');
             return NextResponse.json(
@@ -37,13 +34,10 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // 3️⃣ Bezpieczny origin
         const origin =
             req.headers.get('origin') ||
             process.env.NEXT_PUBLIC_APP_URL ||
             'http://localhost:3000';
-
-
 
         const letterId = saveLetter(letterData);
 
@@ -71,13 +65,21 @@ export async function POST(req: NextRequest) {
             },
         });
 
-
         if (!session?.url) {
             return NextResponse.json(
                 { error: 'Stripe session created but no URL returned' },
                 { status: 500 }
             );
         }
+
+        await prisma.order.create({
+            data: {
+                stripeSessionId: session.id,
+                amount: 39,
+                status: 'pending',
+                email: session.customer_email ?? '',
+            },
+        });
 
         return NextResponse.json({ url: session.url }, { status: 200 });
 

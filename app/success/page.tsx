@@ -1,4 +1,5 @@
 import { stripe } from '@/lib/stripe';
+import { prisma } from '../../lib/prisma';
 import SuccessDisplay from './success-display';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
@@ -28,11 +29,13 @@ export default async function SuccessPage({
     const sessionId: string = sessionIdParam;
 
     try {
-        const session = await stripe.checkout.sessions.retrieve(sessionId, {
-            expand: ['payment_intent'],
+        const order = await prisma.order.findUnique({
+            where: {
+                stripeSessionId: sessionId,
+            },
         });
 
-        if (session.payment_status !== 'paid') {
+        if (!order || order.status !== 'paid') {
             return (
                 <ErrorState
                     title="Płatność nie została zakończona"
@@ -40,6 +43,10 @@ export default async function SuccessPage({
                 />
             );
         }
+
+        const session = await stripe.checkout.sessions.retrieve(sessionId, {
+            expand: ['payment_intent'],
+        });
 
         const letterId = session.metadata?.letterId;
 
@@ -63,7 +70,6 @@ export default async function SuccessPage({
             );
         }
 
-        // ✅ Przekazujemy letterData jako serializowalny obiekt
         const letterData = JSON.parse(JSON.stringify(storedLetter.data));
 
         return <SuccessDisplay letterData={letterData} />;
