@@ -1,64 +1,103 @@
 import { stripe } from '@/lib/stripe';
-import { generatePaymentDemandLetterContent } from '@/ai/flows/generate-payment-demand-letter';
 import SuccessDisplay from './success-display';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { getLetter } from '../../lib/letter-store';
+
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function SuccessPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+                                              searchParams,
+                                          }: {
+    searchParams: SearchParams;
 }) {
-  const sessionId = searchParams['session_id'] as string;
+    const resolvedSearchParams = await searchParams;
+    const sessionIdParam = resolvedSearchParams['session_id'];
 
-  if (!sessionId) {
-    return <ErrorState title="Brak ID sesji" message="Nie znaleziono identyfikatora sesji płatności. Spróbuj ponownie." />;
-  }
-
-  try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-    if (session.payment_status !== 'paid') {
-      return <ErrorState title="Płatność nie została zakończona" message="Status Twojej płatności to wciąż nieopłacony. Jeśli problem będzie się powtarzał, skontaktuj się z nami." />;
+    if (!sessionIdParam || Array.isArray(sessionIdParam)) {
+        return (
+            <ErrorState
+                title="Brak ID sesji"
+                message="Nie znaleziono identyfikatora sesji płatności. Spróbuj ponownie."
+            />
+        );
     }
 
-    const letterDataString = session.metadata?.letterData;
-    if (!letterDataString) {
-        throw new Error('Nie znaleziono danych do wygenerowania listu w sesji Stripe.');
+    const sessionId: string = sessionIdParam;
+
+    try {
+        const session = await stripe.checkout.sessions.retrieve(sessionId, {
+            expand: ['payment_intent'],
+        });
+
+        if (session.payment_status !== 'paid') {
+            return (
+                <ErrorState
+                    title="Płatność nie została zakończona"
+                    message="Status Twojej płatności to wciąż nieopłacony."
+                />
+            );
+        }
+
+        const letterId = session.metadata?.letterId;
+
+        if (!letterId) {
+            return (
+                <ErrorState
+                    title="Brak danych dokumentu"
+                    message="Nie znaleziono ID dokumentu w sesji płatności."
+                />
+            );
+        }
+
+        const storedLetter = getLetter(letterId);
+
+        if (!storedLetter) {
+            return (
+                <ErrorState
+                    title="Dane dokumentu wygasły"
+                    message="Dane dokumentu nie są już dostępne w pamięci serwera."
+                />
+            );
+        }
+
+        // ✅ Przekazujemy letterData jako serializowalny obiekt
+        const letterData = JSON.parse(JSON.stringify(storedLetter.data));
+
+        return <SuccessDisplay letterData={letterData} />;
+    } catch (error: unknown) {
+        console.error('[Success Page Error]', error);
+
+        const message =
+            error instanceof Error
+                ? error.message
+                : 'Wystąpił nieznany błąd podczas weryfikacji płatności.';
+
+        return <ErrorState title="Błąd weryfikacji płatności" message={message} />;
     }
-    
-    const letterData = JSON.parse(letterDataString);
-    
-    const { htmlContent } = await generatePaymentDemandLetterContent(letterData);
-
-    if (!htmlContent) {
-        throw new Error('Nie udało się wygenerować treści dokumentu po opłaceniu.');
-    }
-
-    return <SuccessDisplay htmlContent={htmlContent} />;
-
-  } catch (error) {
-    console.error(`[Success Page Error]`, error);
-    const message = error instanceof Error ? error.message : "Wystąpił nieznany błąd podczas weryfikacji płatności."
-    return <ErrorState title="Błąd weryfikacji płatności" message={message} />;
-  }
 }
 
-function ErrorState({ title, message }: { title: string, message: string }) {
+function ErrorState({
+                        title,
+                        message,
+                    }: {
+    title: string;
+    message: string;
+}) {
     return (
-      <div className="container mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>{title}</AlertTitle>
-          <AlertDescription>{message}</AlertDescription>
-        </Alert>
-        <div className="mt-6 text-center">
-            <Button asChild>
-                <Link href="/generate">Wróć do generatora</Link>
-            </Button>
+        <div className="container mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
+            <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>{title}</AlertTitle>
+                <AlertDescription>{message}</AlertDescription>
+            </Alert>
+            <div className="mt-6 text-center">
+                <Button asChild>
+                    <Link href="/generate">Wróć do generatora</Link>
+                </Button>
+            </div>
         </div>
-      </div>
     );
 }

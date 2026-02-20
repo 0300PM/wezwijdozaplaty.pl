@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useRef, useState, type MouseEvent } from 'react';
 import { Button } from "@/components/ui/button";

@@ -12,7 +12,7 @@ export const config = {
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const signature = headers().get('Stripe-Signature') as string;
+  const signature = (await headers()).get('Stripe-Signature') as string;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
-    console.log(`❌ Error message: ${message}`);
+    console.log(` Error message: ${message}`);
     return new Response(`Webhook Error: ${message}`, { status: 400 });
   }
 
@@ -39,10 +39,10 @@ export async function POST(req: Request) {
     // send a confirmation email, or grant access to a service.
     // For this app, the fulfillment happens on the /success page,
     // but this webhook is here as a best practice for async fulfillment.
-    console.log('✅ Payment was successful for session ID:', session.id);
-    console.log('✅ Customer email:', session.customer_details?.email);
+    console.log(' Payment was successful for session ID:', session.id);
+    console.log(' Customer email:', session.customer_details?.email);
   } else {
-    console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`);
+    console.warn(` Unhandled event type: ${event.type}`);
   }
   
   // Return a 200 response to acknowledge receipt of the event

@@ -8,7 +8,7 @@ export function Logo({ className }: { className?: string }) {
         className
       )}
     >
-      ZapłaćTeraz
+      Wezwwij Do Zaplaty
     </span>
   );
 }
