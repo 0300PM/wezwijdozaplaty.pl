@@ -1,23 +1,28 @@
-import { headers } from 'next/headers';
+// app/api/webhooks/stripe/route.ts
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
-import { prisma } from '../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
 
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
+// 🔥 WAŻNE - Stripe NIE działa na edge
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
-    const body = await req.text();
-    const signature = (await headers()).get('Stripe-Signature') as string;
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!stripe) {
+        return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
+    }
 
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     if (!webhookSecret) {
-        console.error('Stripe webhook secret is not set.');
-        return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
+        return NextResponse.json({ error: 'Missing webhook secret' }, { status: 500 });
+    }
+
+    // 🔥 KLUCZOWE
+    const body = await req.text();
+    const signature = req.headers.get('stripe-signature');
+
+    if (!signature) {
+        return NextResponse.json({ error: 'No signature' }, { status: 400 });
     }
 
     let event: Stripe.Event;
@@ -25,29 +30,113 @@ export async function POST(req: Request) {
     try {
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
     } catch (err) {
-        const message = err instanceof Error ? err.message : 'Unknown error';
-        console.log(` Error message: ${message}`);
-        return new Response(`Webhook Error: ${message}`, { status: 400 });
+        console.error('❌ Stripe signature error:', err);
+        return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
-    if (event.type === 'checkout.session.completed') {
-        const session = event.data.object as Stripe.Checkout.Session;
+    // 🔥 opcjonalne (ale bardzo polecane)
+    if (process.env.NODE_ENV === 'production' && !event.livemode) {
+        console.warn('⚠️ Ignoring test event in production');
+        return NextResponse.json({ received: true });
+    }
 
-        console.log(' Payment was successful for session ID:', session.id);
-        console.log(' Customer email:', session.customer_details?.email);
+    try {
+        switch (event.type) {
+            case 'checkout.session.completed':
+                await handleCheckoutSessionCompleted(event);
+                break;
 
-        await prisma.order.update({
-            where: {
-                stripeSessionId: session.id,
-            },
+            case 'checkout.session.expired':
+                await handleCheckoutSessionExpired(event);
+                break;
+
+            default:
+                console.log(`Unhandled event: ${event.type}`);
+        }
+
+        return NextResponse.json({ received: true });
+    } catch (err) {
+        console.error('❌ Webhook handler error:', err);
+        return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
+    }
+}
+
+async function handleCheckoutSessionCompleted(event: Stripe.Event) {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    const paymentIntentId =
+        typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : session.payment_intent?.id ?? null;
+
+    const email = session.customer_details?.email ?? '';
+
+    const order = await prisma.order.findUnique({
+        where: { stripeSessionId: session.id },
+    });
+
+    if (!order) {
+        console.error('❌ Order not found:', session.id);
+        return;
+    }
+
+    // 🔥 idempotencja
+    if (order.status === 'paid') {
+        console.log('⚠️ Already paid:', order.id);
+        return;
+    }
+
+    await prisma.$transaction([
+        prisma.order.update({
+            where: { stripeSessionId: session.id },
             data: {
                 status: 'paid',
-                stripePaymentIntentId: session.payment_intent as string,
+                email,
+                ...(paymentIntentId && {
+                    stripePaymentIntentId: paymentIntentId,
+                }),
             },
-        });
-    } else {
-        console.warn(` Unhandled event type: ${event.type}`);
-    }
+        }),
 
-    return NextResponse.json({ received: true });
+        ...(order.letterId
+            ? [
+                prisma.letter.update({
+                    where: { id: order.letterId },
+                    data: { status: 'paid' },
+                }),
+            ]
+            : []),
+    ]);
+
+    console.log('✅ Payment completed:', order.id);
+}
+
+async function handleCheckoutSessionExpired(event: Stripe.Event) {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    const order = await prisma.order.findUnique({
+        where: { stripeSessionId: session.id },
+    });
+
+    if (!order) return;
+
+    if (order.status !== 'pending') return;
+
+    await prisma.$transaction([
+        prisma.order.update({
+            where: { stripeSessionId: session.id },
+            data: { status: 'expired' },
+        }),
+
+        ...(order.letterId
+            ? [
+                prisma.letter.update({
+                    where: { id: order.letterId },
+                    data: { status: 'expired' },
+                }),
+            ]
+            : []),
+    ]);
+
+    console.log('⌛ Session expired:', order.id);
 }

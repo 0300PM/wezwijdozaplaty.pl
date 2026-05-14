@@ -1,5 +1,5 @@
 import { stripe } from '@/lib/stripe';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '@/lib/prisma';
 import SuccessDisplay from './success-display';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
