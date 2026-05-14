@@ -5,16 +5,8 @@ import type { PaymentDemandLetterInput } from '@/ai/flows/generate-payment-deman
 
 function validateLetterData(data: unknown): data is PaymentDemandLetterInput {
     if (!data || typeof data !== 'object') return false;
-
     const d = data as Record<string, unknown>;
-
-    const requiredFields = [
-        'creditorName',
-        'debtorName',
-        'amount',
-        'dueDate',
-    ];
-
+    const requiredFields = ['creditorName', 'debtorName', 'amount', 'invoiceDueDate'];
     return requiredFields.every(
         (field) =>
             d[field] !== undefined &&
@@ -27,26 +19,17 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json().catch(() => null);
 
-        if (!body?.letterData) {
-            return NextResponse.json({ error: 'Letter data is required' }, { status: 400 });
-        }
-
-        if (!validateLetterData(body.letterData)) {
-            return NextResponse.json({ error: 'Invalid letter data' }, { status: 400 });
+        if (!body?.letterData || !validateLetterData(body.letterData)) {
+            return NextResponse.json({ error: 'Invalid or missing letter data' }, { status: 400 });
         }
 
         if (!stripe) {
             return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
         }
 
-        const origin =
-            req.headers.get('origin') ||
-            process.env.NEXT_PUBLIC_APP_URL ||
-            'http://localhost:3000';
+        const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+        const UNIT_AMOUNT = 999;
 
-        const UNIT_AMOUNT = 3900;
-
-        // --- 1. Create letter ---
         const letter = await prisma.letter.create({
             data: {
                 data: JSON.parse(JSON.stringify(body.letterData)),
@@ -54,11 +37,10 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        // --- 2. Create Stripe session ---
         const session = await stripe.checkout.sessions.create(
             {
                 mode: 'payment',
-
+                payment_method_types: ['card', 'blik', 'p24'],
                 line_items: [
                     {
                         price_data: {
@@ -71,32 +53,21 @@ export async function POST(req: NextRequest) {
                         quantity: 1,
                     },
                 ],
-
                 success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
                 cancel_url: `${origin}/cancel`,
-
                 metadata: {
                     letterId: letter.id,
                 },
-
-                // 🔥 WAŻNE
-                customer_creation: 'always',
-                billing_address_collection: 'required',
-
-                // opcjonalne, ale polecane
-                allow_promotion_codes: true,
             },
             {
-                // 🔥 zabezpieczenie przed duplikacją
                 idempotencyKey: `checkout_${letter.id}`,
             }
         );
 
         if (!session.url) {
-            throw new Error('No session URL');
+            return NextResponse.json({ error: 'Stripe session creation failed' }, { status: 500 });
         }
 
-        // --- 3. Create order ---
         await prisma.order.create({
             data: {
                 stripeSessionId: session.id,
@@ -109,10 +80,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ url: session.url });
     } catch (err) {
-        console.error(err);
-        return NextResponse.json(
-            { error: 'Failed to create checkout session' },
-            { status: 500 }
-        );
+        console.error('Checkout error:', err);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

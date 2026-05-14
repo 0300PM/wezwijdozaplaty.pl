@@ -28,12 +28,16 @@ export default function LetterPreview({ htmlContent, letterData, onReset }: Lett
     const handleUnlock = async () => {
         setIsPaying(true);
 
+        console.log('Sending letterData:', JSON.stringify(letterData, null, 2));
+
+        const payload = { letterData };
+
         let response: Response;
         try {
             response = await fetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ letterData }),
+                body: JSON.stringify(payload),
             });
         } catch {
             showError('Nie udało się połączyć z serwerem.');
@@ -43,10 +47,12 @@ export default function LetterPreview({ htmlContent, letterData, onReset }: Lett
         if (!response.ok) {
             let msg = `Błąd serwera (${response.status})`;
             try {
-                const data = await response.json();
-                if (data?.error) msg = data.error;
+                const errorData = await response.json();
+                console.error('Server error response:', errorData);
+                if (errorData?.error) msg = errorData.error;
             } catch {
-                // odpowiedź nie jest JSON
+                const text = await response.text().catch(() => '');
+                console.error('Server error (non-JSON):', text);
             }
             showError(msg);
             return;
@@ -60,12 +66,12 @@ export default function LetterPreview({ htmlContent, letterData, onReset }: Lett
             return;
         }
 
-        if (data.error) {
+        if (data?.error) {
             showError(data.error);
             return;
         }
 
-        if (!data.url) {
+        if (!data?.url) {
             showError('Nie udało się utworzyć sesji płatności.');
             return;
         }
@@ -107,7 +113,7 @@ export default function LetterPreview({ htmlContent, letterData, onReset }: Lett
                             ) : (
                                 <>
                                     <Lock className="mr-2 h-4 w-4" />
-                                    Odblokuj PDF (39 PLN)
+                                    Odblokuj PDF (9.99 PLN)
                                 </>
                             )}
                         </Button>
@@ -127,16 +133,16 @@ export default function LetterPreview({ htmlContent, letterData, onReset }: Lett
                         />
                         <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm">
                             <div className="text-center p-4 rounded-lg">
-                                <span
-                                    className="inline-block text-4xl sm:text-5xl font-bold text-gray-400 opacity-50 -rotate-12 font-sans"
-                                    style={{
-                                        textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-                                        pointerEvents: 'none',
-                                    }}
-                                    aria-hidden="true"
-                                >
-                                    Wersja podglądowa
-                                </span>
+                <span
+                    className="inline-block text-4xl sm:text-5xl font-bold text-gray-400 opacity-50 -rotate-12 font-sans"
+                    style={{
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+                        pointerEvents: 'none',
+                    }}
+                    aria-hidden="true"
+                >
+                  Wersja podglądowa
+                </span>
                             </div>
                         </div>
                     </div>

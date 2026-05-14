@@ -66,7 +66,7 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <div className="my-4">
-                <span className="text-5xl font-bold">39</span>
+                <span className="text-5xl font-bold">9.99</span>
                 <span className="text-xl font-medium text-muted-foreground"> PLN</span>
               </div>
               <p className="text-muted-foreground mb-6">
