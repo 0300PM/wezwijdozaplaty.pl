@@ -59,7 +59,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  // @ts-ignore
+    return (
     <html lang="pl" suppressHydrationWarning>
     <head>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -72,6 +73,22 @@ export default function RootLayout({
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Literata:opsz,wght@7..72,400;700&display=swap"
             rel="stylesheet"
         />
+
+        <script async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6800391309176998"
+                crossOrigin="anonymous"></script>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+        <script async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6800391309176998"
+                crossOrigin="anonymous"></script>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+
         <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
@@ -85,13 +102,14 @@ export default function RootLayout({
             'min-h-screen bg-background font-body text-foreground antialiased'
         )}
     >
-    <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-background focus:text-foreground">
-          Przejdź do głównej treści
-        </a>
-        <div className="relative flex min-h-dvh flex-1 flex-col">
-            <Adsense />
-          <SiteHeader />
-          <main id="main-content" className="flex-1">
+    <a href="#main-content"
+       className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-background focus:text-foreground">
+        Przejdź do głównej treści
+    </a>
+    <div className="relative flex min-h-dvh flex-1 flex-col">
+        <Adsense/>
+        <SiteHeader/>
+        <main id="main-content" className="flex-1">
               {children}
           </main>
           <SiteFooter />

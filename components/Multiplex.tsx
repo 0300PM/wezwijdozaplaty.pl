@@ -16,12 +16,11 @@ export default function Multiplex() {
     }, []);
 
     return (
-        <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-format="autorelaxed"
-            data-ad-client="ca-pub-6800391309176998"
-            data-ad-slot="MULTIPLEX_SLOT_ID"
-        />
+        <ins className="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6800391309176998"
+             data-ad-slot="8229545667"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
     );
 }
