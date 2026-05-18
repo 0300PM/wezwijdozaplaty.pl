@@ -63,6 +63,12 @@ export default function RootLayout({
     return (
     <html lang="pl" suppressHydrationWarning>
     <meta name="google-site-verification" content="WpI8KO8KMHsNGUBiuLWFPUf6mGbVJpEUdHZzgeCv7uw" />
+
+    <meta property="og:title" content="Wezwij do zapłaty - Generator Wezwań do Zapłaty" />
+    <meta property="og:description" content="Szybko i łatwo wygeneruj profesjonalne wezwanie do zapłaty" />
+    <meta property="og:image" content="https://wezwijdozaplaty.com/baner.png" />
+    <meta property="og:url" content="https://wezwijdozaplaty.com/" />
+    <meta property="og:type" content="website" />
     <head>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link
