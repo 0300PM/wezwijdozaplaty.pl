@@ -24,10 +24,10 @@ export default function Home() {
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-headline text-3xl font-bold tracking-tight text-primary sm:text-4xl">Jak to działa?</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Proces jest prosty i intuicyjny. Wystarczą 3 kroki.
+            Proces jest prosty i intuicyjny.
           </p>
         </div>
-        <div className="mt-16 grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-8">
+        <div className="mt-16 grid grid-cols gap-y-12 gap-x-10 md:grid-cols-2 md:gap-x-8">
           <div className="flex flex-col items-center text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg text-primary">
               <FileText className="h-6 w-6" />
@@ -38,19 +38,10 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg text-primary">
-              <Eye className="h-6 w-6" />
-            </div>
-            <h3 className="mt-5 text-lg font-semibold text-primary">2. Dokonaj płatności</h3>
-            <p className="mt-2 text-base text-muted-foreground">
-              Zobaczysz zabezpieczony podgląd dokumentu. Dokonaj bezpiecznej płatności, aby go odblokować.
-            </p>
-          </div>
-          <div className="flex flex-col items-center text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg  text-primary">
               <Download className="h-6 w-6" />
             </div>
-            <h3 className="mt-5 text-lg font-semibold text-primary">3. Pobierz PDF</h3>
+            <h3 className="mt-5 text-lg font-semibold text-primary">2. Pobierz PDF</h3>
             <p className="mt-2 text-base text-muted-foreground">
               Natychmiast po opłaceniu otrzymasz gotowe do wysłania wezwanie w formacie PDF.
             </p>
