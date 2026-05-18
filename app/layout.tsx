@@ -66,7 +66,7 @@ export default function RootLayout({
 
     <meta property="og:title" content="Wezwij do zapłaty - Generator Wezwań do Zapłaty" />
     <meta property="og:description" content="Szybko i łatwo wygeneruj profesjonalne wezwanie do zapłaty" />
-    <meta property="og:image" content="https://wezwijdozaplaty.com/baner.pn1g" />
+    <meta property="og:image" content="https://wezwijdozaplaty.com/baner.png" />
     <meta property="og:url" content="https://wezwijdozaplaty.com/" />
     <meta property="og:type" content="website" />
     <head>
