@@ -56,29 +56,9 @@ export default function TermsPage() {
                         </p>
                     </CardContent>
                 </Card>
-
                 <Card className="shadow-lg">
                     <CardHeader>
-                        <CardTitle>§3 Płatności</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4 text-muted-foreground leading-7">
-                        <p>
-                            Dostęp do pobrania dokumentu PDF może wymagać dokonania jednorazowej płatności.
-                        </p>
-
-                        <p>
-                            Płatności realizowane są przez zewnętrznego operatora płatności.
-                        </p>
-
-                        <p>
-                            Po poprawnym zaksięgowaniu płatności użytkownik otrzymuje możliwość pobrania dokumentu.
-                        </p>
-                    </CardContent>
-                </Card>
-
-                <Card className="shadow-lg">
-                    <CardHeader>
-                        <CardTitle>§4 Odpowiedzialność</CardTitle>
+                        <CardTitle>§3 Odpowiedzialność</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4 text-muted-foreground leading-7">
                         <p>
@@ -97,7 +77,7 @@ export default function TermsPage() {
 
                 <Card className="shadow-lg">
                     <CardHeader>
-                        <CardTitle>§5 Kontakt</CardTitle>
+                        <CardTitle>§4 Kontakt</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4 text-muted-foreground leading-7">
                         <p>

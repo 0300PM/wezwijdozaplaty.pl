@@ -59,7 +59,6 @@ const FORM_STORAGE_KEY = "payment-form-data";
 
 const steps = [
     { id: 1, name: "Wypełnij formularz" },
-    { id: 2, name: "Podgląd i płatność" },
     { id: 3, name: "Pobierz dokument" },
 ];
 
@@ -241,7 +240,7 @@ export default function PaymentForm() {
                                 <FormItem><FormLabel>Numer dokumentu</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                             <FormField control={form.control} name="amount" render={({ field }) => (
-                                <FormItem><FormLabel>Kwota (PLN)</FormLabel><FormControl><Input type="number" step="0.01" {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.value === "" ? undefined : parseFloat(e.target.value))} /></FormControl><FormMessage /></FormItem>
+                                <FormItem><FormLabel>Kwota (PLN)</FormLabel><FormControl><Input type="number" step="0.01" value={field.value ?? ""} onChange={(e) => { const value = e.target.value; field.onChange(value === "" ? undefined : Number(value)); }} /></FormControl><FormMessage /></FormItem>
                             )} />
                         </div>
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">

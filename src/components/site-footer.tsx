@@ -9,7 +9,7 @@ export default function SiteFooter() {
                     <div className="flex flex-col items-center gap-3 md:flex-row md:items-center md:gap-4">
                         <Logo />
                         <p className="text-sm text-muted-foreground text-center md:text-left">
-                            © {new Date().getFullYear()} ZapłaćTeraz. Wszelkie prawa zastrzeżone.
+                            © {new Date().getFullYear()} Wezwij Do Zapłaty. Wszelkie prawa zastrzeżone.
                         </p>
                     </div>
 

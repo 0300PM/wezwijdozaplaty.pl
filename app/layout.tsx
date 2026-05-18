@@ -46,7 +46,7 @@ const jsonLd = {
   description: 'Szybko i łatwo wygeneruj profesjonalne, zgodne z prawem wezwanie do zapłaty.',
   offers: {
     '@type': 'Offer',
-    price: '39.00',
+    price: 'free',
     priceCurrency: 'PLN',
   },
 };
@@ -82,7 +82,7 @@ export default function RootLayout({
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-background focus:text-foreground">
           Przejdź do głównej treści
         </a>
-        <div className="relative flex min-h-dvh flex-col">
+        <div className="relative flex min-h-dvh flex-1 flex-col">
           <SiteHeader />
           <main id="main-content" className="flex-1">{children}</main>
           <SiteFooter />

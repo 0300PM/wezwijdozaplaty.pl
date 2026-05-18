@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+//import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Eye, Download } from 'lucide-react';
-
+import './globals.css'
 export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <div className="container mx-auto overflow-x-hidden px-4 py-12 sm:px-6 lg:px-8">
       <section className="text-center py-16">
         <h1 className="font-headline text-4xl font-bold tracking-tight text-primary sm:text-5xl md:text-6xl">
           Twoje Profesjonalne Wezwanie do Zapłaty w 3 Minuty
@@ -29,7 +29,7 @@ export default function Home() {
         </div>
         <div className="mt-16 grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-8">
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg text-primary">
               <FileText className="h-6 w-6" />
             </div>
             <h3 className="mt-5 text-lg font-semibold text-primary">1. Wypełnij formularz</h3>
@@ -38,7 +38,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg text-primary">
               <Eye className="h-6 w-6" />
             </div>
             <h3 className="mt-5 text-lg font-semibold text-primary">2. Dokonaj płatności</h3>
@@ -47,7 +47,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg  text-primary">
               <Download className="h-6 w-6" />
             </div>
             <h3 className="mt-5 text-lg font-semibold text-primary">3. Pobierz PDF</h3>
@@ -55,28 +55,6 @@ export default function Home() {
               Natychmiast po opłaceniu otrzymasz gotowe do wysłania wezwanie w formacie PDF.
             </p>
           </div>
-        </div>
-      </section>
-
-      <section id="pricing" className="py-16">
-        <div className="flex justify-center">
-          <Card className="w-full max-w-sm text-center shadow-lg border-2 border-primary">
-            <CardHeader>
-              <CardTitle className="font-headline text-3xl text-primary">Jednorazowa opłata</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="my-4">
-                <span className="text-5xl font-bold">9.99</span>
-                <span className="text-xl font-medium text-muted-foreground"> PLN</span>
-              </div>
-              <p className="text-muted-foreground mb-6">
-                Pełny dostęp, bez abonamentu i ukrytych kosztów. Płacisz raz, generujesz dokument.
-              </p>
-              <Button asChild className="w-full bg-accent hover:bg-accent/90" size="lg">
-                <Link href="/generate">Rozpocznij</Link>
-              </Button>
-            </CardContent>
-          </Card>
         </div>
       </section>
     </div>
