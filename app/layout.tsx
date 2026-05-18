@@ -11,14 +11,14 @@ import Multiplex from '../components/Multiplex'
 const VERCEL_URL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
 
 export const metadata: Metadata = {
-  title: 'ZapłaćTeraz - Generator Wezwań do Zapłaty',
+  title: 'Wezwij do zapłaty - Generator Wezwań do Zapłaty',
   description: 'Szybko i łatwo wygeneruj profesjonalne, zgodne z prawem wezwanie do zapłaty. Oszczędź czas i pieniądze na prawnikach.',
   metadataBase: new URL(VERCEL_URL),
   openGraph: {
-    title: 'ZapłaćTeraz - Generator Wezwań do Zapłaty',
+    title: 'Wezwij do zapłaty - Generator Wezwań do Zapłaty',
     description: 'Najszybszy sposób na wygenerowanie oficjalnego wezwania do zapłaty online.',
     url: VERCEL_URL,
-    siteName: 'ZapłaćTeraz',
+    siteName: 'wezwijdozaplaty',
     locale: 'pl_PL',
     type: 'website',
   },
