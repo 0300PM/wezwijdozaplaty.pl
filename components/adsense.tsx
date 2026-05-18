@@ -19,7 +19,7 @@ export default function Adsense() {
         <ins
             className="adsbygoogle"
             style={{ display: "block" }}
-            data-ad-client="ca-pub-XXXXXXXXXXXX"
+            data-ad-client="ca-pub-6800391309176998"
             data-ad-slot="1234567890"
             data-ad-format="auto"
             data-full-width-responsive="true"
