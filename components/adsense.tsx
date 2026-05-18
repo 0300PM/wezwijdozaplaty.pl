@@ -17,7 +17,7 @@ export default function Adsense() {
 
     return (
         <ins className="adsbygoogle"
-             style="display:block"
+             style={{ display: "block" } as React.CSSProperties}
              data-ad-client="ca-pub-6800391309176998"
              data-ad-slot="6393719813"
              data-ad-format="auto"

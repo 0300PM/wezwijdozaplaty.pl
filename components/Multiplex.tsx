@@ -17,7 +17,7 @@ export default function Multiplex() {
 
     return (
         <ins className="adsbygoogle"
-             style="display:block"
+             style={{ display: "block" } as React.CSSProperties}
              data-ad-client="ca-pub-6800391309176998"
              data-ad-slot="8229545667"
              data-ad-format="auto"
