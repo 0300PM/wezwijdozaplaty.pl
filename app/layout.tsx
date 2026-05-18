@@ -5,8 +5,8 @@ import { Toaster } from '@/components/ui/toaster';
 import SiteHeader from '@/components/site-header';
 import SiteFooter from '@/components/site-footer';
 import Script from "next/script";
-import  Adsense  from '../components/adsense'
-import Multiplex from '../components/Multiplex'
+//import  Adsense  from '../components/adsense'
+//import Multiplex from '../components/Multiplex'
 
 const VERCEL_URL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
 
@@ -62,6 +62,7 @@ export default function RootLayout({
   // @ts-ignore
     return (
     <html lang="pl" suppressHydrationWarning>
+    <meta name="google-site-verification" content="WpI8KO8KMHsNGUBiuLWFPUf6mGbVJpEUdHZzgeCv7uw" />
     <head>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link
@@ -107,13 +108,13 @@ export default function RootLayout({
         Przejdź do głównej treści
     </a>
     <div className="relative flex min-h-dvh flex-1 flex-col">
-        <Adsense/>
+        { /* <Adsense/> */}
         <SiteHeader/>
         <main id="main-content" className="flex-1">
               {children}
           </main>
           <SiteFooter />
-            <Multiplex />
+        {/* <Multiplex >/ */}
         </div>
 
         <Toaster />
