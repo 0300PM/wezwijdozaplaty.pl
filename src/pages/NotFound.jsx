@@ -9,7 +9,7 @@ function NotFound() {
         <p className="section-subtitle">
           Przepraszamy, strona, której szukasz, nie istnieje lub została przeniesiona.
         </p>
-        <Link to="/" className="btn">Wróć na stronę główną</Link>
+        <Link to="/public" className="btn">Wróć na stronę główną</Link>
       </div>
     </div>
   );

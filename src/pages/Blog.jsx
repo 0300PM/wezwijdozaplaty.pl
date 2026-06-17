@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { blogPosts } from '../utils/blogData';
+import { blogPosts } from '../utils/blogData.js';
 
 function Blog() {
   return (

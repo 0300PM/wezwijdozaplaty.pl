@@ -1,20 +1,20 @@
 import { Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import AdBanner from './components/AdBanner';
-import CookieConsent from './components/CookieConsent';
-import Home from './pages/Home';
-import Generator from './pages/Generator';
-import About from './pages/About';
-import FAQ from './pages/FAQ';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
-import RODO from './pages/RODO';
-import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
-import Regulamin from './pages/Regulamin';
-import AdsPolicy from './pages/AdsPolicy';
-import NotFound from './pages/NotFound';
+import Header from './components/Header.jsx';
+import Footer from './components/Footer.jsx';
+import AdBanner from './components/AdBanner.jsx';
+import CookieConsent from './components/CookieConsent.jsx';
+import Home from './pages/Home.jsx';
+import Generator from './pages/Generator.jsx';
+import About from './pages/About.jsx';
+import FAQ from './pages/FAQ.jsx';
+import Blog from './pages/Blog.jsx';
+import BlogPost from './pages/BlogPost.jsx';
+import RODO from './pages/RODO.jsx';
+import Privacy from './pages/Privacy.jsx';
+import Terms from './pages/Terms.jsx';
+import Regulamin from './pages/Regulamin.jsx';
+import AdsPolicy from './pages/AdsPolicy.jsx';
+import NotFound from './pages/NotFound.jsx';
 
 function App() {
   return (

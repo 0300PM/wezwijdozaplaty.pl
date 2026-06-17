@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
-import { blogPosts } from '../utils/blogData';
-import NotFound from './NotFound';
+import { blogPosts } from '../utils/blogData.js';
+import NotFound from './NotFound.jsx';
 
 function BlogPost() {
   const { slug } = useParams();

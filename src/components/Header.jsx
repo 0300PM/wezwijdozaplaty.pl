@@ -7,7 +7,7 @@ function Header() {
   return (
     <header className="header">
       <div className="container header-inner">
-        <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
+        <Link to="/public" className="logo" onClick={() => setMenuOpen(false)}>
           Wezwij do Zapłaty
         </Link>
 
@@ -20,7 +20,7 @@ function Header() {
         </button>
 
         <nav className={`nav ${menuOpen ? 'open' : ''}`}>
-          <NavLink to="/" onClick={() => setMenuOpen(false)}>Strona główna</NavLink>
+          <NavLink to="/public" onClick={() => setMenuOpen(false)}>Strona główna</NavLink>
           <NavLink to="/generator" onClick={() => setMenuOpen(false)}>Generator</NavLink>
           <NavLink to="/blog" onClick={() => setMenuOpen(false)}>Blog</NavLink>
           <NavLink to="/faq" onClick={() => setMenuOpen(false)}>FAQ</NavLink>
