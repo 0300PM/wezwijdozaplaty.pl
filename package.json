@@ -4,10 +4,10 @@
   "description": "Darmowa aplikacja webowa do generowania wezwań do zapłaty w PDF i DOCX",
   "private": true,
   "scripts": {
-    "install:all": "npm install && cd frontend/backend && npm install && cd ../frontend && npm install",
-    "dev": "concurrently \"cd frontend/backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
     "build": "cd frontend && npm run build",
-    "start": "cd frontend/backend && NODE_ENV=production npm start"
+    "start": "cd backend && NODE_ENV=production npm start"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
