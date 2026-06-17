@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { generateDocxBlob } from "@/lib/docx-builder";
 import { formatCurrency, formatDate, initialLetterState, obligationTypes } from "@/lib/document-model";
 import { generatePdfBlob } from "@/lib/pdf-builder";
 import type { LetterPayload } from "@/types/document";
 
 export default function GeneratorPage() {
+  const previewRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<LetterPayload>(initialLetterState);
   const [loadingPdf, setLoadingPdf] = useState(false);
   const [loadingDocx, setLoadingDocx] = useState(false);
@@ -33,7 +34,14 @@ export default function GeneratorPage() {
     const setter = format === "pdf" ? setLoadingPdf : setLoadingDocx;
     setter(true);
     try {
-      const blob = format === "pdf" ? await generatePdfBlob(form) : await generateDocxBlob(form);
+      const previewElement = previewRef.current;
+      if (format === "pdf" && !previewElement) {
+        throw new Error("Podgląd PDF nie jest gotowy.");
+      }
+      const blob =
+        format === "pdf"
+          ? await generatePdfBlob(previewElement as HTMLElement)
+          : await generateDocxBlob(form);
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
@@ -56,7 +64,7 @@ export default function GeneratorPage() {
     const amount = formatCurrency(form.amount);
 
     return (
-      <div className="min-h-[360px] rounded border border-border bg-white p-6 text-sm leading-relaxed text-black">
+      <div ref={previewRef} className="min-h-[360px] rounded border border-border bg-white p-6 text-sm leading-relaxed text-black">
         <h2 className="mb-5 text-center text-base font-bold uppercase tracking-wide">{title}</h2>
         <p className="text-right">{form.city ? `${form.city}, ` : ""}{currentDate}</p>
         <div className="mb-3"><strong className="mb-1 block">Wierzyciel:</strong>{form.creditorName && <div>{form.creditorName}</div>}{form.creditorAddress && <div className="whitespace-pre-line">{form.creditorAddress}</div>}</div>
