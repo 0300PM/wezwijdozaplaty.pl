@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { createRequire } from 'module';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import PdfPrinter from 'pdfmake';
 import { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } from 'docx';
 
@@ -312,6 +314,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Wewnętrzny błąd serwera.' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend działa na porcie ${PORT}`);
-});
+const currentFilePath = fileURLToPath(import.meta.url);
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === currentFilePath;
+
+if (isDirectRun) {
+  app.listen(PORT, () => {
+    console.log(`Backend działa na porcie ${PORT}`);
+  });
+}
+
+export default app;

@@ -3,13 +3,33 @@
   "version": "1.0.0",
   "description": "Darmowa aplikacja webowa do generowania wezwań do zapłaty w PDF i DOCX",
   "private": true,
+  "type": "module",
   "scripts": {
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
-    "build": "cd frontend && npm run build",
-    "start": "cd backend && NODE_ENV=production npm start"
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "node --watch backend/server.js",
+    "dev:web": "vite --config frontend/vite.config.js",
+    "build": "vite build --config frontend/vite.config.js",
+    "start": "node backend/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "docx": "^8.5.0",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0",
+    "pdfmake": "^0.2.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^6.0.2",
+    "concurrently": "^8.2.2",
+    "vite": "8.0.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
