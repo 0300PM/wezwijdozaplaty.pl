@@ -1,0 +1,23 @@
+{
+  "name": "wezwij-do-zaplaty-backend",
+  "version": "1.0.0",
+  "description": "Backend generujący wezwania do zapłaty w PDF i DOCX",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "docx": "^8.5.0",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0",
+    "pdfmake": "^0.2.10"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

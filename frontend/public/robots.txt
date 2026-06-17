@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://wezwijdozaplaty.pl/sitemap.xml
+
+# AdSense verification
+# ads.txt available at: https://wezwijdozaplaty.pl/ads.txt
