@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply m-0 bg-bg text-text antialiased;
+}
+
+a {
+  @apply text-accent transition-colors duration-150 hover:text-primary;
+}
+
+.section {
+  @apply py-14;
+}
+
+.section-title {
+  @apply mb-3 text-center text-3xl font-semibold tracking-tight text-primary;
+}
+
+.section-subtitle {
+  @apply mx-auto mb-10 max-w-2xl text-center leading-relaxed text-textMuted;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded border border-primary bg-primary px-6 py-3 text-[0.9375rem] font-medium text-white no-underline transition duration-150 hover:border-primarySoft hover:bg-primarySoft hover:text-white;
+}
+
+.btn-secondary {
+  @apply border-borderStrong bg-surface text-primary hover:border-borderStrong hover:bg-bg hover:text-primary;
+}
+
+.btn-outline {
+  @apply border-border bg-transparent text-textMuted hover:border-borderStrong hover:bg-bg hover:text-primary;
+}
+
+.card {
+  @apply rounded border border-border bg-surface p-6 transition duration-150 hover:border-borderStrong hover:shadow-mdsoft;
+}
+
+.card-title {
+  @apply mb-2 text-base font-semibold text-primary;
+}
+
+.card-text {
+  @apply text-sm leading-relaxed text-textMuted;
+}
+
+.legal-page {
+  @apply mx-auto max-w-[760px] rounded border border-border bg-surface p-6 md:p-10;
+}
+
+.legal-page h1 {
+  @apply mb-5 text-[1.75rem] font-semibold tracking-tight text-primary;
+}
+
+.legal-page h2 {
+  @apply mb-3 mt-8 text-lg font-semibold text-primary;
+}
+
+.legal-page p,
+.legal-page li {
+  @apply mb-3 text-[0.9375rem] leading-relaxed text-textMuted;
+}
+
+.legal-page ul {
+  @apply mb-4 list-disc pl-5;
+}
+
+.footer-link {
+  @apply mb-2 block text-[#323232] no-underline transition-colors duration-150 hover:text-white hover:no-underline;
+}
+
+.blog-article {
+  @apply mx-auto max-w-[760px] rounded border border-border bg-surface p-6 md:p-10;
+}
+
+.blog-article h1 {
+  @apply mb-3 text-[1.75rem] font-semibold tracking-tight text-primary;
+}
+
+.blog-article h2 {
+  @apply mb-3 mt-8 text-xl font-semibold text-primary;
+}
+
+.blog-article p,
+.blog-article li {
+  @apply mb-3 leading-relaxed text-textMuted;
+}
+
+.blog-article ul {
+  @apply mb-4 list-disc pl-5;
+}

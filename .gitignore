@@ -1,3 +1,9 @@
 .idea
 node_modules
 .dist
+/.next/cache/webpack/client-development
+/.next/cache/webpack/client-production
+/.next/cache/webpack
+/.next/cache
+/.next
+/out
