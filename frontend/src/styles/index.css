@@ -3,9 +3,9 @@
   --surface: #ffffff;
   --surface-elevated: #ffffff;
   --text: #171717;
-  --text-muted: #525252;
-  --text-subtle: #737373;
-  --primary: #0f172a;
+  --text-muted: #0e0e0e;
+  --text-subtle: #2a2929;
+  --primary: #8dacff;
   --primary-soft: #1e293b;
   --accent: #0f766e;
   --accent-soft: #ccfbf1;
@@ -134,6 +134,7 @@ img {
   color: var(--primary);
   text-decoration: none;
 }
+
 
 .nav .btn {
   padding: 0.5rem 1rem;
@@ -548,7 +549,7 @@ textarea {
 /* Footer */
 .footer {
   background: var(--primary);
-  color: #a3a3a3;
+  color: #323232;
   padding: 3.5rem 0 1.5rem;
   font-size: 0.875rem;
 }
@@ -568,7 +569,7 @@ textarea {
 }
 
 .footer a {
-  color: #a3a3a3;
+  color: #323232;
   display: block;
   margin-bottom: 0.5rem;
   text-decoration: none;
